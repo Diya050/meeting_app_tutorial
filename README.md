@@ -84,90 +84,7 @@ In Permission Rules,
    - Meeting Attendee (Read, Write, Create)
     
 - With this we are done with our work on Frappe desk.
-- Now we will create apps/meeting/meeting/templates/generators/meeting.html to style our webpage for each meeting created:
-
-```html
-<!--meeting.html-->
-
-<!-- Start of main content section -->
-
-<div class="py-1 row">
-	<pre>    </pre>
-	<h2>{{ title }}</h2>
-</div>
-
-<div class="row">
-	<pre>    </pre>
-	<ul class="list-unstyled">
-		<br>
-		<!-- Displaying the date of the document -->
-		<li>
-			<label>Date:</label> {{ doc.get_formatted("date") }}
-		</li>
-		<!-- Displaying the time range of the document -->
-		<li>
-			<label>Time:</label> {{ doc.get_formatted("from_time") }} to {{ doc.get_formatted("to_time") }}
-		</li>
-		<!-- Displaying the status of the document -->
-		<li>
-			<label>Status: </label> {{ doc.status }}
-		</li>
-	</ul>
-</div>
-
-<div class="col">
-	<!-- Displaying status badges based on the value of 'status' -->
-	{%- if status == 'Completed' -%}
-	<span class="badge badge-success">Completed</span>
-	{%- elif status == 'Planned' -%}
-	<span class="badge badge-primary">Planned</span>
-	{%- elif status == 'Invitation Sent' -%}
-	<span class="badge badge-primary">Invitation Sent</span>
-	{%- elif status == 'In Progress' -%}
-	<span class="badge badge-primary">In Progress</span>
-	{%- elif status == 'Cancelled' -%}
-	<span class="badge badge-primary">Cancelled</span>
-	{%- endif -%}
-</div>
-
-<div class="col">
-	<pre>    </pre>
-	<hr>
-	<h2>Agenda:</h2>
-	<ul>
-		{% for agenda in doc.agenda %}
-		<!-- Displaying each agenda item -->
-		<li>
-			{{ agenda.description }}
-		</li>
-		{% endfor %}
-	</ul>
-
-	<hr>
-	<h2>Attendees:</h2>
-	<ul>
-		{% for attendee in doc.attendees %}
-		<!-- Displaying each attendee with an optional accepted icon if they accepted the invitation -->
-		<li>
-			{{ attendee.full_name }} {% if attendee.accepted %} <i class="icon icon-ok"></i> {% endif %}
-		</li>
-		{% endfor %}
-	</ul>
-
-	<hr>
-	<h2>Minutes:</h2>
-	<ul>
-		{% for minute in doc.minutes %}
-		<!-- Displaying each minute item -->
-		<li>
-			{{ minute.description }}
-		</li>
-		{% endfor %}
-	</ul>
-
-<!-- End of main content section -->
-
-```
+- Now we will create apps/meeting/meeting/templates/generators/meeting.html to style our webpage for each meeting created: [meeting.html](meeting.html)
 
 `Output`:
 ![image](https://github.com/Diya050/meeting/assets/124448340/d3d4967e-6269-451a-9ba3-c1263d84b06f)
@@ -516,85 +433,14 @@ def update_minute_status(doc, method=None):
 				minute.db_set("todo", None, update_modified=False)
 				minute.db_set("status", "Closed", update_modified=False)
 ```
-- Now create meeting/templates/emails/meeting_invitation.html to style our invitatio mail to be sent:
+- Now create meeting/templates/emails/meeting_invitation.html to style our invitatio mail to be sent: [meeting_invitation.html](meeting_invitation.html)
 
-```html
-<!--meeting_invitation.html-->
-
-<p>
-    <!-- Display the sender's name in a label with a default style -->
-    <span class="label label-default"> {{ sender }}</span> Inviting you for a Meeting
-</p>
-
-<blockquote
-    style="border-left: 3px solid #d1d8dd; padding: 7px 15px; margin-left: 0px;">
-    <!-- Display the meeting date and time in a blockquote with a left border -->
-    Date: {{ date.strftime('%d %B %Y') }} <br>
-    From: {{ from_time }}
-    To: {{ to_time  }}
-</blockquote>
-
-{% if invitation_message %}
-    <!-- Display the invitation message if available -->
-    <h3>Invitation Message</h3>
-    <p>{{ invitation_message or '' }}</p>
-{% endif %}
-
-{% if agenda %}
-    <!-- Display the meeting agenda if available -->
-    <h4>Meeting Agenda</h4>
-    {% for each in agenda %}
-        <li>{{ each.description }}</li>
-    {% endfor %}
-{% endif %}
-```
 `Output:`
 
 ![image](https://github.com/Diya050/meeting/assets/124448340/33cb64c3-e8c3-4ac4-a616-3bfef2e36014)
 
-- Now to make our app's home page, we will create meeting/www/meetings.html:
+- Now to make our app's home page, we will create meeting/www/meetings.html: [meetings.html](meetings.html)
 
-```html
-<!--meetings.html-->
-
-{% macro render_meetings(meetings) %}
-    <!-- Macro to render a list of meetings -->
-    {% if meetings %}
-
-    <ul class="list-unstyled meetings-list">
-        {% for meeting in meetings %}
-        <a href="/meetings/{{ meeting.page_name }}">
-            <!-- Create a hyperlink to the individual meeting page -->
-            <li>
-                {{ meeting.title }}<br>
-                <!-- Display the meeting title and formatted date with from_time and to_time -->
-                <span class="text-muted">{{ frappe.format_date(meeting.date) }}: {{ meeting.from_time }} to {{ meeting.to_time }}</span>
-            </li>
-        </a>
-        {% endfor %}
-    </ul>
-
-    {% else %}
-
-    <!-- If there are no meetings, display a message -->
-    <p class="text-muted">No meetings listed</p>
-
-    {% endif %}
-{% endmacro %}
-
-<h2>Planned Meetings</h2>
-
-{{ render_meetings(planned_meetings) }}
-<!-- Call the 'render_meetings' macro to render the planned meetings -->
-
-<hr>
-
-<h2>Past Meetings</h2>
-
-{{ render_meetings(past_meetings) }}
-<!-- Call the 'render_meetings' macro to render the past meetings -->
-
-```
 `Output:`
 ![image](https://github.com/Diya050/meeting/assets/124448340/c4187d94-48c5-46cf-9941-fa8590e679a4)
 
