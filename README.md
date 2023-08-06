@@ -89,8 +89,6 @@ In Permission Rules,
 ```html
 <!--meeting.html-->
 
-{% extends "templates/web.html" %}
-
 {% block content %}
 <!-- Start of main content section -->
 
