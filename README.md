@@ -89,7 +89,6 @@ In Permission Rules,
 ```html
 <!--meeting.html-->
 
-{% block content %}
 <!-- Start of main content section -->
 
 <div class="py-1 row">
@@ -167,7 +166,7 @@ In Permission Rules,
 	</ul>
 
 <!-- End of main content section -->
-{% endblock %}
+
 ```
 
 `Output`:
